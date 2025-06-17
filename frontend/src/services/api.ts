@@ -91,27 +91,27 @@ class ApiClient {
   // Métodos HTTP genéricos
   async get<T = any>(url: string, params?: Record<string, any>): Promise<T> {
     const response = await this.instance.get<ApiResponse<T>>(url, { params });
-    return response.data.data || response.data;
+    return response.data.data;
   }
 
   async post<T = any>(url: string, data?: any): Promise<T> {
     const response = await this.instance.post<ApiResponse<T>>(url, data);
-    return response.data.data || response.data;
+    return response.data.data;
   }
 
   async put<T = any>(url: string, data?: any): Promise<T> {
     const response = await this.instance.put<ApiResponse<T>>(url, data);
-    return response.data.data || response.data;
+    return response.data.data;
   }
 
   async patch<T = any>(url: string, data?: any): Promise<T> {
     const response = await this.instance.patch<ApiResponse<T>>(url, data);
-    return response.data.data || response.data;
+    return response.data.data;
   }
 
   async delete<T = any>(url: string): Promise<T> {
     const response = await this.instance.delete<ApiResponse<T>>(url);
-    return response.data.data || response.data;
+    return response.data.data;
   }
 
   // Método para fazer upload de arquivos
@@ -137,7 +137,7 @@ class ApiClient {
       },
     });
 
-    return response.data.data || response.data;
+    return response.data.data;
   }
 
   // Método para cancelar requisições

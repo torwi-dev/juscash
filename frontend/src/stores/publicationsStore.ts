@@ -102,21 +102,10 @@ export const usePublicationsStore = create<PublicationsStore>()(
           const finalFilters = { ...get().filters, ...filters };
           set({ filters: finalFilters });
           const response = await publicationsService.getPublications(finalFilters);
-          set({ publications: response.data, isLoading: false });
+          set({ publications: response.publications, isLoading: false });
         } catch (error: any) {
           set({ isLoading: false, error: error.message || 'Erro ao carregar publicações' });
           throw error;
-        }
-      },
-
-      fetchStats: async () => {
-        const state = get();
-        if (state.isLoading || state.isLoadingKanban) return;
-        try {
-          const stats = await publicationsService.getStats();
-          set({ stats });
-        } catch (error: any) {
-          console.error('Erro ao carregar estatísticas:', error);
         }
       },
 

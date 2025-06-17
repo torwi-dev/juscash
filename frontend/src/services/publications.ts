@@ -138,12 +138,7 @@ export class PublicationsService {
    * Busca publicações para o Kanban (organizadas por status)
    * NOVA IMPLEMENTAÇÃO - usa endpoint /kanban
    */
-  async getPublicationsForKanban(filters: PublicationFilters = {}): Promise<{
-    nova: Publication[];
-    lida: Publication[];
-    enviada_adv: Publication[];
-    concluida: Publication[];
-  }> {
+  async getPublicationsForKanban(filters: PublicationFilters = {}): Promise<any> {
     try {
       console.log('🔄 Chamando API /kanban com filtros:', filters);
       
