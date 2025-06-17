@@ -1,0 +1,82 @@
+# .github/workflows/deploy-backend-publish.yml
+name: 🚀 Deploy Backend (Publish Profile)
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'backend/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+
+      - name: 🟢 Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: 📦 Install dependencies
+        working-directory: ./backend
+        run: npm ci
+
+      - name: 🏗️ Build TypeScript
+        working-directory: ./backend
+        run: npm run build
+
+      - name: 🗄️ Generate Prisma Client
+        working-directory: ./backend
+        run: npm run prisma:generate
+
+      - name: 📋 Create production package.json
+        working-directory: ./backend
+        run: |
+          cat > package-deploy.json << 'EOF'
+          {
+            "name": "backend",
+            "version": "1.0.0",
+            "main": "dist/index.js",
+            "scripts": {
+              "start": "node dist/index.js",
+              "postinstall": "npx prisma generate"
+            },
+            "dependencies": {
+              "@prisma/client": "^6.9.0",
+              "bcrypt": "^6.0.0",
+              "bcryptjs": "^3.0.2",
+              "cors": "^2.8.5",
+              "dotenv": "^16.5.0",
+              "express": "^5.1.0",
+              "helmet": "^8.1.0",
+              "jsonwebtoken": "^9.0.2",
+              "morgan": "^1.10.0",
+              "prisma": "^6.9.0",
+              "swagger-jsdoc": "^6.2.8",
+              "swagger-ui-express": "^5.0.1",
+              "zod": "^3.25.57"
+            }
+          }
+          EOF
+          mv package-deploy.json package.json
+
+      - name: 🚀 Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'juscash-api'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./backend
+
+      - name: 🩺 Health Check
+        run: |
+          echo "⏳ Aguardando 60 segundos para app inicializar..."
+          sleep 60
+          echo "🔍 Testando saúde da aplicação..."
+          curl -f https://juscash-api.azurewebsites.net/health || echo "❌ Health check falhou - app ainda inicializando"
+          echo "✅ Deploy concluído! App disponível em: https://juscash-api.azurewebsites.net"

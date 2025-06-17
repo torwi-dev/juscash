@@ -1,0 +1,93 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum PublicationStatus {
+  nova
+  lida
+  enviada_adv
+  concluida
+}
+
+enum ScrapingStatus {
+  running
+  completed
+  failed
+  partial
+  timeout
+  maintenance
+}
+
+enum UserRole {
+  admin
+  operador
+  scraper_service
+  readonly
+}
+
+model User {
+  id           Int      @id @default(autoincrement())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(operador)
+  isActive     Boolean  @default(true) @map("is_active")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+  
+  @@map("users")
+}
+
+model ScraperExecution {
+  id                     Int            @id @default(autoincrement())
+  executionDate          DateTime       @map("execution_date") @db.Date
+  startTime              DateTime?      @map("start_time")
+  endTime                DateTime?      @map("end_time")
+  status                 ScrapingStatus @default(running)
+  publicationsFound      Int            @default(0) @map("publications_found")
+  publicationsNew        Int            @default(0) @map("publications_new")
+  publicationsDuplicated Int            @default(0) @map("publications_duplicated")
+  errorMessage           String?        @map("error_message")
+  djeUrl                 String?        @map("dje_url")
+  hostName               String?        @map("host_name")
+  executedBy             String?        @map("executed_by")
+  environment            String?        @default("production")
+  createdAt              DateTime       @default(now()) @map("created_at")
+  
+  publications Publication[]
+  
+  @@map("scraper_executions")
+}
+
+model Publication {
+  id                 Int               @id @default(autoincrement())
+  processNumber      String            @unique @map("process_number")
+  publicationDate    DateTime?         @map("publication_date") @db.Date
+  availabilityDate   DateTime?         @map("availability_date") @db.Date
+  authors            String[]
+  lawyers            String[]
+  defendant          String            @default("Instituto Nacional do Seguro Social - INSS")
+  mainValue          Decimal?          @map("main_value") @db.Decimal(12,2)
+  interestValue      Decimal?          @map("interest_value") @db.Decimal(12,2)
+  legalFees          Decimal?          @map("legal_fees") @db.Decimal(12,2)
+  fullContent        String?           @map("full_content")
+  status             PublicationStatus @default(nova)
+  contentHash        String?           @map("content_hash")
+  sourceUrl          String?           @map("source_url")
+  scraperExecutionId Int?              @map("scraper_execution_id")
+  createdAt          DateTime          @default(now()) @map("created_at")
+  updatedAt          DateTime          @updatedAt @map("updated_at")
+  
+  scraperExecution   ScraperExecution? @relation(fields: [scraperExecutionId], references: [id])
+  
+  @@index([processNumber])
+  @@index([status])
+  @@index([publicationDate])
+  @@index([sourceUrl])
+  @@map("publications")
+}
