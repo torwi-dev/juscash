@@ -1,29 +1,18 @@
 {
+  "staticFiles": {
+    "headers": {
+      "*.js": {
+        "Content-Type": "application/javascript; charset=utf-8"
+      },
+      "*.mjs": {
+        "Content-Type": "application/javascript; charset=utf-8"
+      },
+      "*.css": {
+        "Content-Type": "text/css; charset=utf-8"
+      }
+    }
+  },
   "routes": [
-    {
-      "route": "/assets/*",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
-    },
-    {
-      "route": "*.js",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
-    },
-    {
-      "route": "*.mjs",
-      "headers": {
-        "Content-Type": "application/javascript"
-      }
-    },
-    {
-      "route": "*.css",
-      "headers": {
-        "Content-Type": "text/css"
-      }
-    },
     {
       "route": "/*",
       "serve": "/index.html",
@@ -31,12 +20,6 @@
     }
   ],
   "navigationFallback": {
-    "rewrite": "/index.html",
-    "exclude": ["/assets/*", "*.js", "*.css", "*.png", "*.jpg", "*.gif", "*.ico", "*.svg"]
-  },
-  "mimeTypes": {
-    ".js": "application/javascript",
-    ".mjs": "application/javascript",
-    ".css": "text/css"
+    "rewrite": "/index.html"
   }
 }
