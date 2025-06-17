@@ -63,7 +63,6 @@ export interface PublicationState {
 
 export interface PublicationActions {
   fetchPublications: (filters?: PublicationFilters) => Promise<void>;
-  fetchStats: () => Promise<void>;
   updateStatus: (id: number, status: PublicationStatus) => Promise<void>;
   setFilters: (filters: PublicationFilters) => void;
   setSelectedPublication: (publication: Publication | null) => void;

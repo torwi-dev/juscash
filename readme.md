@@ -1,6 +1,6 @@
 # 🏛️ JusCash DJE - Sistema de Automação Judicial
 
-> **Sistema Enterprise COMPLETO** para automação e gerenciamento de publicações do Diário da Justiça Eletrônico de São Paulo
+> **Sistema** para automação e gerenciamento de publicações do Diário da Justiça Eletrônico de São Paulo
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
@@ -24,7 +24,6 @@ Sistema completo desenvolvido em **7 dias** com **Clean Architecture** para scra
 - ✅ **Sistema de Filtros** - Busca avançada funcionando
 - ✅ **Export CSV** - Funcional com filtros aplicados
 - ✅ **Python Scraper** - 100% Completo e testado
-- ✅ **Deploy Azure** - Documentado e scripts prontos
 
 **🚀 Sistema 100% funcional e pronto para produção!**
 

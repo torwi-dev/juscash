@@ -115,7 +115,6 @@ export const usePublicationsStore = create<PublicationsStore>()(
           set((state) => ({
             publications: state.publications.map((p) => p.id === id ? publication : p),
           }));
-          get().fetchStats();
           return publication;
         } catch (error: any) {
           set({ error: error.message || 'Erro ao atualizar status' });
