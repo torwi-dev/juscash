@@ -1,0 +1,18 @@
+{
+  "buildType": "custom",
+  "appLocation": "/frontend",
+  "outputLocation": "dist",
+  "appBuildCommand": "npm run build",
+  "appInstallCommand": "npm install",
+  "routes": [
+    {
+      "route": "/*",
+      "serve": "/index.html",
+      "statusCode": 200
+    }
+  ],
+  "mimeTypes": {
+    ".js": "text/javascript",
+    ".mjs": "text/javascript"
+  }
+}
