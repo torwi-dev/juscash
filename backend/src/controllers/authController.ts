@@ -65,9 +65,18 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     const authService = getAuthService();
     const user = await authService.register(registerData);
 
+    // ✅ CORREÇÃO: Gerar token após registrar o usuário
+    const loginData: LoginDto = {
+      email: registerData.email,
+      password: registerData.password,
+    };
+    
+    const authResult = await authService.login(loginData);
+
     res.status(201).json({
       message: 'Usuário criado com sucesso',
-      user: user.toPublicData(),
+      user: authResult.user,
+      token: authResult.token, // ✅ Agora retorna o token também
     });
   } catch (error) {
     if (error instanceof z.ZodError) {
