@@ -88,30 +88,43 @@ class ApiClient {
     );
   }
 
+  // Função auxiliar para extrair dados da resposta
+  private extractResponseData<T>(response: AxiosResponse): T {
+    const data = response.data;
+    
+    // Se a resposta tem estrutura ApiResponse<T> (com data wrapper)
+    if (data && typeof data === 'object' && 'data' in data) {
+      return data.data;
+    }
+    
+    // Se a resposta é direta (auth endpoints)
+    return data;
+  }
+
   // Métodos HTTP genéricos
   async get<T = any>(url: string, params?: Record<string, any>): Promise<T> {
-    const response = await this.instance.get<ApiResponse<T>>(url, { params });
-    return response.data.data;
+    const response = await this.instance.get(url, { params });
+    return this.extractResponseData<T>(response);
   }
 
   async post<T = any>(url: string, data?: any): Promise<T> {
-    const response = await this.instance.post<ApiResponse<T>>(url, data);
-    return response.data.data;
+    const response = await this.instance.post(url, data);
+    return this.extractResponseData<T>(response);
   }
 
   async put<T = any>(url: string, data?: any): Promise<T> {
-    const response = await this.instance.put<ApiResponse<T>>(url, data);
-    return response.data.data;
+    const response = await this.instance.put(url, data);
+    return this.extractResponseData<T>(response);
   }
 
   async patch<T = any>(url: string, data?: any): Promise<T> {
-    const response = await this.instance.patch<ApiResponse<T>>(url, data);
-    return response.data.data;
+    const response = await this.instance.patch(url, data);
+    return this.extractResponseData<T>(response);
   }
 
   async delete<T = any>(url: string): Promise<T> {
-    const response = await this.instance.delete<ApiResponse<T>>(url);
-    return response.data.data;
+    const response = await this.instance.delete(url);
+    return this.extractResponseData<T>(response);
   }
 
   // Método para fazer upload de arquivos
@@ -123,7 +136,7 @@ class ApiClient {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await this.instance.post<ApiResponse<T>>(url, formData, {
+    const response = await this.instance.post(url, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -137,7 +150,7 @@ class ApiClient {
       },
     });
 
-    return response.data.data;
+    return this.extractResponseData<T>(response);
   }
 
   // Método para cancelar requisições

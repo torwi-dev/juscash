@@ -22,9 +22,9 @@ class ScraperService {
         }
         // Validar data muito antiga (máximo 90 dias)
         const ninetyDaysAgo = new Date();
-        ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+        ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 180);
         if (data.executionDate < ninetyDaysAgo) {
-            throw new DomainErrors_1.BusinessRuleError('Não é possível criar execução para data superior a 90 dias atrás');
+            throw new DomainErrors_1.BusinessRuleError('Não é possível criar execução para data superior a 180 dias atrás');
         }
         // Validações opcionais
         if (data.djeUrl && !this.isValidUrl(data.djeUrl)) {

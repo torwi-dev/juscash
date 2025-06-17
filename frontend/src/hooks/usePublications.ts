@@ -93,7 +93,6 @@ export const useKanbanBoard = () => {
   const revertOptimisticMove = usePublicationsStore((state) => state.revertOptimisticMove);
   const setSelectedPublication = usePublicationsStore((state) => state.setSelectedPublication);
   const loadMore = usePublicationsStore((state) => state.loadMore);
-  const fetchStats = usePublicationsStore((state) => state.fetchStats);
   
 let isInitializing = false;
   // Carrega dados iniciais do Kanban
@@ -103,13 +102,12 @@ let isInitializing = false;
       console.log('🔄 Inicializando Kanban (primeira vez)...');
       
       Promise.all([
-        loadKanbanData(),
-        fetchStats()
+        loadKanbanData()
       ]).finally(() => {
         isInitializing = false;
       });
     }
-  }, [loadKanbanData, fetchStats]);
+  }, [loadKanbanData]);
 
   // Move com atualização otimista
   const handleMovePublicationOptimistic = useCallback(
@@ -125,8 +123,6 @@ let isInitializing = false;
           await movePublication(publicationId, fromStatus, toStatus);
         }
         
-        // Atualiza estatísticas
-        fetchStats();
       } catch (error) {
         // Se der erro, reverte a mudança otimista
         revertOptimisticMove(publicationId, fromStatus, toStatus);
@@ -134,7 +130,7 @@ let isInitializing = false;
         throw error;
       }
     },
-    [movePublicationOptimistic, movePublication, movePublicationToPosition, revertOptimisticMove, fetchStats]
+    [movePublicationOptimistic, movePublication, movePublicationToPosition, revertOptimisticMove]
   );
 
   const handleLoadMore = useCallback(

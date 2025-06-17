@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     
     debug_save_extracted_text: bool = False
     # API Configuration - USANDO TOKEN
-    api_base_url: str = Field(default="http://localhost:3000", env="API_BASE_URL")
+    api_base_url: str = Field(default="https://juscash-api.azurewebsites.net", env="API_BASE_URL")
     api_token: str = Field(env="API_TOKEN")  # OBRIGATÓRIO
     api_timeout: int = Field(default=30, env="API_TIMEOUT")
     api_retry_attempts: int = Field(default=3, env="API_RETRY_ATTEMPTS")
