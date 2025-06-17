@@ -30,11 +30,11 @@ export class ScraperService {
       throw new ValidationError('Data de execução não pode ser futura');
     }
 
-    // Validar data muito antiga (máximo 90 dias)
+    // Validar data muito antiga (máximo 180 dias)
     const ninetyDaysAgo = new Date();
-    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 90);
+    ninetyDaysAgo.setDate(ninetyDaysAgo.getDate() - 180);
     if (data.executionDate < ninetyDaysAgo) {
-      throw new BusinessRuleError('Não é possível criar execução para data superior a 90 dias atrás');
+      throw new BusinessRuleError('Não é possível criar execução para data superior a 180 dias atrás');
     }
 
     // Validações opcionais
