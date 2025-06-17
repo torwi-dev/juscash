@@ -5,7 +5,7 @@ import {
   PaginatedResult,
   CreatePublicationDto 
 } from '../domain/interfaces/IPublicationRepository';
-import { Publication } from '../domain/entities/Publication';
+import { Publication, PublicationDto } from '../domain/entities/Publication';
 import { PublicationStatus } from '@prisma/client';
 import { 
 
@@ -140,15 +140,35 @@ export class PublicationService {
 		  { page: page || 1, limit: limit || 30 }
 		);
 		
-		return {
-		  publications: result.data,
-		  pagination: {
-			page: result.page,
-			limit: result.limit,
-			total: result.total,
-			pages: result.pages
-		  }
-		};
+  const publicationsDto: PublicationDto[] = result.data.map(pub => ({
+    id: pub.id,
+    processNumber: pub.processNumber,
+    publicationDate: pub.publicationDate.toISOString(),
+    availabilityDate: pub.availabilityDate.toISOString(),
+    authors: pub.authors,
+    lawyers: pub.lawyers,
+    defendant: pub.defendant,
+    mainValue: pub.mainValue ? Number(pub.mainValue) : null,
+    interestValue: pub.interestValue ? Number(pub.interestValue) : null,
+    legalFees: pub.legalFees ? Number(pub.legalFees) : null,
+    fullContent: pub.fullContent,
+    status: pub.status,
+    contentHash: pub.contentHash,
+    sourceUrl: pub.sourceUrl,
+    scraperExecutionId: pub.scraperExecutionId,
+    createdAt: pub.createdAt.toISOString(),
+    updatedAt: pub.updatedAt.toISOString()
+  }));
+  
+  return {
+    publications: publicationsDto, // ← Aqui usa o convertido
+    pagination: {
+      page: result.page,
+      limit: result.limit,
+      total: result.total,
+      pages: result.pages
+    }
+  };
 	  }
 
 	  async searchPublications(

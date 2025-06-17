@@ -1,5 +1,6 @@
 import { Request } from 'express';
-import { UserRole } from '@prisma/client';
+import { Publication, UserRole } from '@prisma/client';
+import { PublicationDto } from '../domain/entities/Publication';
 
 export interface AuthRequest extends Request {
   user?: {
@@ -40,7 +41,7 @@ export interface CreatePublicationRequest {
 }
 
 export interface PublicationResponse {
-  publications: Publication[];
+  publications: PublicationDto[];
   pagination: {
     page: number;
     limit: number;

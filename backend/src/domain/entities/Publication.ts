@@ -64,3 +64,42 @@ export class Publication {
     );
   }
 }
+
+
+// Tipo para API (frontend)
+export interface PublicationDto {
+  id: number;
+  processNumber: string;
+  publicationDate: string;
+  availabilityDate: string;
+  authors: string[];
+  lawyers: string[];
+  defendant: string;
+  mainValue: number | null;
+  interestValue: number | null;
+  legalFees: number | null;
+  fullContent: string | null;
+  status: PublicationStatus;
+  contentHash: string | null;
+  sourceUrl: string | null;
+  scraperExecutionId: number | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PublicationResponse {
+  publications: PublicationDto[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    pages: number;
+  };
+}
+
+export interface KanbanResponse {
+  nova: PublicationDto[];
+  lida: PublicationDto[];
+  enviada_adv: PublicationDto[];
+  concluida: PublicationDto[];
+}
