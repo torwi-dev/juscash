@@ -75,7 +75,7 @@ export function KanbanBoard() {
         destination.index,
         sourceStatus
       );
-      return; // Sem try/catch - é apenas local
+      return;
     }
 
     // MOVIMENTO INTER-COLUNA: Validar transição
@@ -137,13 +137,29 @@ export function KanbanBoard() {
     );
   }
 
-  
-  
   return (
     <div className="w-full h-full flex flex-col overflow-hidden">
       <DragDropContext onDragEnd={handleDragEnd}>
         <div className="flex-1 min-h-0">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
+          {/* Mobile: Scroll horizontal / Desktop: Grid normal */}
+          <div className="h-full md:hidden">
+            {/* Layout Mobile: Scroll horizontal */}
+            <div className="flex gap-4 h-full overflow-x-auto pb-4 px-1">
+              {columns.map((columnId) => (
+                <div key={columnId} className="flex-shrink-0 w-72">
+                  <KanbanColumn
+                    id={columnId}
+                    publications={localKanbanData[columnId] || []}
+                    onViewPublication={open}
+                    filters={filters}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Desktop: Grid layout original */}
+          <div className="hidden md:grid md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
             {columns.map((columnId) => (
               <KanbanColumn
                 key={columnId}
